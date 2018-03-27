@@ -13,16 +13,39 @@ training_data = pd.io.parsers.read_csv('mnist_rotation_train.txt', delim_whitesp
 test_data = pd.io.parsers.read_csv('mnist_rotation_test.txt', delim_whitespace=True,header=None)
 
 training = training_data.as_matrix()
+test = test_data.as_matrix()
 training_data = []
 training_targets = []
-print(training[1])
+test_data =  []
+test_targets = []
+
+for i in range(len(test)):
+    test_data.append(test[i][0:len(test[i]) - 1])
+    test_targets.append(test[i][-1])
+
+
 for i in range(len(training)):
     training_data.append(training[i][0:len(training[i]) - 1])
     training_targets.append(training[i][-1])
 
-print(training_data[1])
-print(training_targets[1])
-test_data = test_data.as_matrix()
+clf = MLPClassifier(solver='lbfgs', alpha=1e-5,hidden_layer_sizes=(5, 2), random_state=1)
+clf.fit(training_data, training_targets)
+MLPClassifier(activation='relu', alpha=1e-05, batch_size='auto',
+       beta_1=0.9, beta_2=0.999, early_stopping=False,
+       epsilon=1e-08, hidden_layer_sizes=(15,), learning_rate='constant',
+       learning_rate_init=0.001, max_iter=200, momentum=0.9,
+       nesterovs_momentum=True, power_t=0.5, random_state=1, shuffle=True,
+       solver='lbfgs', tol=0.0001, validation_fraction=0.1, verbose=False,
+       warm_start=False)
+answers = clf.predict(test_data)
+
+z = 0
+for h, i in zip(answers, test_targets):
+    if h == i:
+        z = z + 1
+z = z/ len(answers)
+print(z)
+#test_data = test_data.as_matrix()
 
 
 #pass in a list for how many nodes in each layer

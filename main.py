@@ -28,23 +28,23 @@ for i in range(len(training)):
     training_data.append(training[i][0:len(training[i]) - 1])
     training_targets.append(training[i][-1])
 
-clf = MLPClassifier(solver='lbfgs', alpha=1e-5,hidden_layer_sizes=(5, 2), random_state=1)
-clf.fit(training_data, training_targets)
-MLPClassifier(activation='relu', alpha=1e-05, batch_size='auto',
-       beta_1=0.9, beta_2=0.999, early_stopping=False,
-       epsilon=1e-08, hidden_layer_sizes=(15,), learning_rate='constant',
-       learning_rate_init=0.001, max_iter=200, momentum=0.9,
-       nesterovs_momentum=True, power_t=0.5, random_state=1, shuffle=True,
-       solver='lbfgs', tol=0.0001, validation_fraction=0.1, verbose=False,
-       warm_start=False)
-answers = clf.predict(test_data)
+#hidden_layer_sizes=(30,30), activation='logistic', solver='adam',
+ #                   batch_size='auto', learning_rate='adaptive', learning_rate_init=0.5,
+  #                  shuffle=False, random_state=1, tol=-5)
+for i in range(200, 2100, 300):
+    rotated = MLPClassifier(hidden_layer_sizes=(i,int(i/2),int(i/4)), max_iter=500)
+    rotated.fit(training_data, training_targets)
+    guesses = rotated.predict(test_data)
 
-z = 0
-for h, i in zip(answers, test_targets):
-    if h == i:
-        z = z + 1
-z = z/ len(answers)
-print(z)
+    correct = 0
+    for guess, answer in zip(guesses, test_targets):
+        if guess == answer:
+            correct += 1
+    accuracy = correct/len(guesses) * 100.00
+    print(i)
+    print(accuracy)
+#----------------------------------------------------------------
+
 #test_data = test_data.as_matrix()
 
 

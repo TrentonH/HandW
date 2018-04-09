@@ -61,6 +61,6 @@ for i in range(200, 2100, 300):
 #evaluationAccList = evaluation_accuracy
 
 
-
 #plt.plot(list(range(1000)), evaluationAccList)
 #plt.show()
+
